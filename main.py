@@ -8,6 +8,15 @@ from src.config import Config
 from src.device import Device
 from src.logger import log
 from src.bruteforce import bruteforce
+import usb.core
+
+# Find USB devices
+dev = usb.core.find(find_all=True)
+
+# Print device information
+for device in dev:
+    print("Vendor ID: {}, Product ID: {}".format(hex(device.idVendor), hex(device.idProduct)))
+
 
 # Define default values for Termux environment
 DEFAULT_CONFIG = "default_config.json5"
