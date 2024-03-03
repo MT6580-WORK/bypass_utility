@@ -9,20 +9,6 @@ from src.device import Device
 from src.logger import log
 from src.bruteforce import bruteforce
 
-def find_usb_devices():
-    usb_devices = []
-
-    # Iterate over possible USB device paths
-    for bus_dir in os.listdir("/sys/bus/usb/devices"):
-        bus_path = os.path.join("/sys/bus/usb/devices", bus_dir)
-        if os.path.isdir(bus_path):
-            for device_dir in os.listdir(bus_path):
-                device_path = os.path.join(bus_path, device_dir)
-                if os.path.isdir(device_path):
-                    usb_devices.append(device_path)
-
-    return usb_devices
-
 def main():
     # Find USB devices
     usb_devices = find_usb_devices()
@@ -30,6 +16,14 @@ def main():
     # Print USB device paths
     for device in usb_devices:
         print("USB Device:", device)
+
+    # Check if the default config file exists
+    default_config = "default_config.json5"
+    if not os.path.exists(default_config):
+        print("Warning: Default config file '{}' is missing.".format(default_config))
+        # Handle this case gracefully, e.g., provide a default configuration
+        # or prompt the user to provide a configuration file.
+    else:
 
 # Define default values for Termux environment
 DEFAULT_CONFIG = "default_config.json5"
