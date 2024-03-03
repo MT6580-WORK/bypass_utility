@@ -8,15 +8,28 @@ from src.config import Config
 from src.device import Device
 from src.logger import log
 from src.bruteforce import bruteforce
-import usb.core
 
-# Find USB devices
-dev = usb.core.find(find_all=True)
+def find_usb_devices():
+    usb_devices = []
 
-# Print device information
-for device in dev:
-    print("Vendor ID: {}, Product ID: {}".format(hex(device.idVendor), hex(device.idProduct)))
+    # Iterate over possible USB device paths
+    for bus_dir in os.listdir("/sys/bus/usb/devices"):
+        bus_path = os.path.join("/sys/bus/usb/devices", bus_dir)
+        if os.path.isdir(bus_path):
+            for device_dir in os.listdir(bus_path):
+                device_path = os.path.join(bus_path, device_dir)
+                if os.path.isdir(device_path):
+                    usb_devices.append(device_path)
 
+    return usb_devices
+
+def main():
+    # Find USB devices
+    usb_devices = find_usb_devices()
+
+    # Print USB device paths
+    for device in usb_devices:
+        print("USB Device:", device)
 
 # Define default values for Termux environment
 DEFAULT_CONFIG = "default_config.json5"
